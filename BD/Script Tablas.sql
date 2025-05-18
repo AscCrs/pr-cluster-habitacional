@@ -50,8 +50,8 @@ create table cargo(
 
 create table cxc(
 
-	cxc_id char(6), -- Formato de año + numero de factura 2025001 2025002
-    cxc_id_cg char(3), -- Id del cargo que se cobra
+	cxc_id char(7), -- Formato de año + numero de factura 2025001 2025002
+    cxc_id_cg char(4), -- Id del cargo que se cobra
     cxc_calle_casa char(1) not null, -- Calle de la casa
     cxc_numero_casa char(2) not null, -- numero de la casa
     cxc_costo float not null, -- Costo en lo que se cobro
@@ -69,7 +69,7 @@ create table cxc(
 
 create table recibo(
 
-r_id_cxc char(6),
+r_id_cxc char(7),
 r_folio char(10), -- esto podria ser una imagen o no se como hacerlo
 r_monto float, -- esto lo pone el usuario
 r_fecha_peticion date,
@@ -102,3 +102,25 @@ constraint chk_re_espacio CHECK ( re_espacio>= 1 AND re_espacio <= 3)
 
 
 );
+
+create table publicacion(
+f_id integer auto_increment,
+f_rfc_usuario char(13),
+f_titulo varchar(255) not null,
+f_contenido text not null,
+f_fecha datetime default current_timestamp,
+
+primary key (f_id)
+);
+
+create table comentario(
+c_id integer auto_increment,
+c_id_f integer,
+c_rfc_usuario char(13),
+c_contenido text not null,
+c_fecha datetime default current_timestamp,
+
+primary key (c_id,c_id_f),
+constraint r_publicacion_comentario_id foreign key (c_id_f) references publicacion(f_id) on delete cascade
+);
+
